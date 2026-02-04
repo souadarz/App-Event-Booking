@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["apps/shared/*"]
+    },
+  },
+  "include": [
+    "apps/api/src/**/*",
+    "apps/shared/**/*"
+  ]
+}

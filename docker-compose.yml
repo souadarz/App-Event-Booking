@@ -3,7 +3,8 @@ services:
   api:
     container_name: event-api
     build:
-      context: ./apps/api
+      context: .
+      dockerfile: ./apps/api/Dockerfile
     ports:
       - "4000:4000"
     env_file:
