@@ -1,0 +1,46 @@
+
+services:
+  api:
+    container_name: event-api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  web:
+    container_name: event-web
+    build:
+      context: ./apps/web
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+  mongo:
+    container_name: event-mongo
+    image: mongo:7
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+
+networks:
+  app-network:
+    driver: bridge
