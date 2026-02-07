@@ -6,6 +6,9 @@ export type EventDocument = Event & Document;
 
 @Schema({ timestamps: true })
 export class Event {
+  save(): Event | PromiseLike<Event> {
+    throw new Error('Method not implemented.');
+  }
   @Prop({ required: true })
   title: string;
 
@@ -21,13 +24,12 @@ export class Event {
   @Prop({ required: true, min: 1 })
   capacity: number;
 
-  @Prop({ 
-    type: String, 
-    enum: EventStatus, 
-    default: EventStatus.DRAFT 
+  @Prop({
+    type: String,
+    enum: EventStatus,
+    default: EventStatus.DRAFT,
   })
   status: EventStatus;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
-
