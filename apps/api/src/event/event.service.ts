@@ -40,8 +40,9 @@ export class EventService {
     return newEvent;
   }
 
-  findAll() {
-    return `This action returns all event`;
+  async findAll(): Promise<Event[]>{
+    const allEvent = await this.eventModel.find();
+    return allEvent;
   }
 
   async findById(id: string): Promise<Event> {
@@ -52,6 +53,7 @@ export class EventService {
     return event;
   }
 
+  // update event
   async update(id: string, dto: UpdateEventDto): Promise<Event> {
     const event = await this.findById(id);
 
@@ -86,7 +88,9 @@ export class EventService {
     return event.save();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+  //supprimer event
+  async remove(id: string): Promise<Event> {
+    const event = await this.findById(id);
+    return event.remove();
   }
 }
