@@ -26,8 +26,10 @@ export class EventController {
     return this.eventService.create(dto);
   }
 
-  @Get()
-  findAll() {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
+  @Get('all')
+  async findAll() {
     return this.eventService.findAll();
   }
 
@@ -38,8 +40,34 @@ export class EventController {
     return this.eventService.update(id, dto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
+  @Patch(':id/publish')
+  async publish(@Param('id') id: string) {
+    return this.eventService.publish(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
+  @Patch(':id/cancel')
+  async cancel(@Param('id') id: string) {
+    return this.eventService.cancel(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.eventService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.eventService.deleteEvent(id);
+  }
+
+  @Get()
+  async findPublished() {
+    return this.eventService.findPublished();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.eventService.findPublishedById(id);
   }
 }

@@ -7,11 +7,14 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Event } from './schema/event.schema';
+import { Event, EventDocument } from './schema/event.schema';
+import { EventStatus } from 'src/common/enums/event-status.enum';
 
 @Injectable()
 export class EventService {
-  constructor(@InjectModel(Event.name) private eventModel: Model<Event>) {}
+  constructor(
+    @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+  ) {}
 
   async create(dto: CreateEventDto): Promise<Event> {
     const exists = await this.eventModel.findOne({
@@ -40,11 +43,13 @@ export class EventService {
     return newEvent;
   }
 
-  findAll() {
-    return `This action returns all event`;
+  // find all event
+  async findAll(): Promise<Event[]> {
+    const allEvent = await this.eventModel.find();
+    return allEvent;
   }
 
-  async findById(id: string): Promise<Event> {
+  async findById(id: string): Promise<EventDocument> {
     const event = await this.eventModel.findById(id);
     if (!event) {
       throw new NotFoundException('Événement introuvable');
@@ -52,7 +57,8 @@ export class EventService {
     return event;
   }
 
-  async update(id: string, dto: UpdateEventDto): Promise<Event> {
+  // update event
+  async update(id: string, dto: UpdateEventDto): Promise<EventDocument> {
     const event = await this.findById(id);
 
     if (dto.capacity !== undefined && dto.capacity <= 0) {
@@ -86,7 +92,38 @@ export class EventService {
     return event.save();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+  //supprimer event
+  async deleteEvent(id: string): Promise<void> {
+    const event = await this.eventModel.findByIdAndDelete(id).exec();
+    if (!event) {
+      throw new NotFoundException('event non trouvé');
+    }
+  }
+
+  //publier un event
+  async publish(id: string): Promise<Event> {
+    const event = await this.findById(id);
+    event.status = EventStatus.PUBLISHED;
+    return event.save();
+  }
+
+  //annulé un event
+  async cancel(id: string): Promise<Event> {
+    const event = await this.findById(id);
+    event.status = EventStatus.CANCELED;
+    return event.save();
+  }
+
+  //find envent with status publish
+  async findPublished(): Promise<Event[]> {
+    return this.eventModel.find({ status: EventStatus.PUBLISHED });
+  }
+
+  async findPublishedById(id: string): Promise<Event> {
+    const event = await this.findById(id);
+    if (event.status !== EventStatus.PUBLISHED) {
+      throw new BadRequestException('Événement non publié');
+    }
+    return event;
   }
 }
