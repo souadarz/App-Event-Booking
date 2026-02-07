@@ -38,7 +38,7 @@ export class ReservationService {
       existingReservation.status !== ReservationStatus.CANCELED
     ) {
       throw new BadRequestException(
-        'Vous avez déjà une réservation active pour cet événement.',
+        'Vous avez déjà une réservation active pour cet événement',
       );
     }
 
@@ -47,7 +47,7 @@ export class ReservationService {
       status: ReservationStatus.CONFIRMED,
     });
     if (confirmedCount >= event.capacity) {
-      throw new BadRequestException('L’événement est complet.');
+      throw new BadRequestException('L’événement est complet');
     }
 
     const reservation = new this.reservationModel({
@@ -58,16 +58,17 @@ export class ReservationService {
     return reservation.save();
   }
 
-  findAll() {
-    return `This action returns all reservation`;
+  async findAll(): Promise<Reservation[]> {
+    return this.reservationModel.find().populate('user event');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} reservation`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} reservation`;
+  async remove(reservationId: string): Promise<void> {
+    const reservation = await this.reservationModel
+      .findByIdAndDelete(reservationId)
+      .exec();
+    if (!reservation) {
+      throw new NotFoundException('Réservation non trouvée');
+    }
   }
 
   //confirmer une reservation
@@ -116,5 +117,9 @@ export class ReservationService {
 
   async findByUser(userId: string): Promise<Reservation[]> {
     return this.reservationModel.find({ user: userId }).populate('event');
+  }
+
+  async findByEvent(eventId: string): Promise<Reservation[]> {
+    return this.reservationModel.find({ event: eventId }).populate('user');
   }
 }

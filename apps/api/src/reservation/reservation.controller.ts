@@ -26,14 +26,9 @@ export class ReservationController {
     return this.reservationService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reservationService.findOne(+id);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.reservationService.remove(+id);
+    return this.reservationService.remove(id);
   }
 
   @Patch(':id/confirm')
@@ -58,5 +53,11 @@ export class ReservationController {
   @Roles('admin', 'participant')
   async findByUser(@Param('userId') userId: string) {
     return this.reservationService.findByUser(userId);
+  }
+
+  @Get('event/:eventId')
+  @Roles('admin')
+  async findByEvent(@Param('eventId') eventId: string) {
+    return this.reservationService.findByEvent(eventId);
   }
 }
