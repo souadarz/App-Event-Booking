@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { Reservation, ReservationDocument } from './schema/reservation.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -67,12 +66,36 @@ export class ReservationService {
     return `This action returns a #${id} reservation`;
   }
 
-  update(id: number, updateReservationDto: UpdateReservationDto) {
-    return `This action updates a #${id} reservation`;
-  }
-
   remove(id: number) {
     return `This action removes a #${id} reservation`;
+  }
+
+  //confirmer une reservation
+  async confirm(id: string): Promise<Reservation> {
+    const reservation = await this.findById(id);
+
+    const event = await this.eventService.findById(
+      reservation.event.toString(),
+    );
+    const confirmedCount = await this.reservationModel.countDocuments({
+      event: reservation.event,
+      status: ReservationStatus.CONFIRMED,
+    });
+    if (confirmedCount >= event.capacity) {
+      throw new BadRequestException(
+        'Impossible de confirmer : capacité maximale atteinte.',
+      );
+    }
+
+    reservation.status = ReservationStatus.CONFIRMED;
+    return reservation.save();
+  }
+
+  //refuser reservation
+  async refuse(id: string): Promise<Reservation> {
+    const reservation = await this.findById(id);
+    reservation.status = ReservationStatus.REFUSED;
+    return reservation.save();
   }
 
   async cancel(id: string): Promise<ReservationDocument> {

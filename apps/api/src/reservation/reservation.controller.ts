@@ -9,12 +9,11 @@ import {
 } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { Roles } from 'src/common/decorators/role.decorator';
 
 @Controller('reservation')
 export class ReservationController {
-  constructor(private readonly reservationService: ReservationService) { }
+  constructor(private readonly reservationService: ReservationService) {}
 
   @Post()
   @Roles('participant')
@@ -32,17 +31,21 @@ export class ReservationController {
     return this.reservationService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateReservationDto: UpdateReservationDto,
-  ) {
-    return this.reservationService.update(+id, updateReservationDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.reservationService.remove(+id);
+  }
+
+  @Patch(':id/confirm')
+  @Roles('admin')
+  async confirm(@Param('id') id: string) {
+    return this.reservationService.confirm(id);
+  }
+
+  @Patch(':id/refuse')
+  @Roles('admin')
+  async refuse(@Param('id') id: string) {
+    return this.reservationService.refuse(id);
   }
 
   @Patch(':id/cancel')
