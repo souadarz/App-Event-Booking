@@ -14,10 +14,10 @@ import { Roles } from 'src/common/decorators/role.decorator';
 
 @Controller('reservation')
 export class ReservationController {
-  constructor(private readonly reservationService: ReservationService) {}
+  constructor(private readonly reservationService: ReservationService) { }
 
   @Post()
-  @Roles('Participant')
+  @Roles('participant')
   async create(@Body() dto: CreateReservationDto) {
     return this.reservationService.create(dto);
   }
@@ -43,5 +43,17 @@ export class ReservationController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.reservationService.remove(+id);
+  }
+
+  @Patch(':id/cancel')
+  @Roles('admin', 'participant')
+  async cancel(@Param('id') id: string) {
+    return this.reservationService.cancel(id);
+  }
+
+  @Get('user/:userId')
+  @Roles('admin', 'participant')
+  async findByUser(@Param('userId') userId: string) {
+    return this.reservationService.findByUser(userId);
   }
 }

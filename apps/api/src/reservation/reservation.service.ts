@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { Reservation, ReservationDocument } from './schema/reservation.schema';
@@ -69,5 +73,25 @@ export class ReservationService {
 
   remove(id: number) {
     return `This action removes a #${id} reservation`;
+  }
+
+  async cancel(id: string): Promise<ReservationDocument> {
+    const reservation = await this.findById(id);
+    reservation.status = ReservationStatus.CANCELED;
+    return reservation.save();
+  }
+
+  async findById(id: string): Promise<ReservationDocument> {
+    const reservation = await this.reservationModel
+      .findById(id)
+      .populate('user event');
+    if (!reservation) {
+      throw new NotFoundException('Réservation introuvable');
+    }
+    return reservation;
+  }
+
+  async findByUser(userId: string): Promise<Reservation[]> {
+    return this.reservationModel.find({ user: userId }).populate('event');
   }
 }
