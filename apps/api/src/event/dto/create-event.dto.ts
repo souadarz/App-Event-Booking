@@ -14,6 +14,6 @@ export class CreateEventDto {
   location: string;
 
   @IsInt()
-  @Min(1)
+  @Min(10)
   capacity: number;
 }

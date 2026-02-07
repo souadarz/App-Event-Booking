@@ -21,7 +21,7 @@ export class Event {
   @Prop({ required: true })
   location: string;
 
-  @Prop({ required: true, min: 1 })
+  @Prop({ required: true, min: 10 })
   capacity: number;
 
   @Prop({
