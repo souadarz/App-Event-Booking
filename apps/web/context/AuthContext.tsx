@@ -2,8 +2,8 @@
 
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/axios';
 import { AuthResponse, User } from '@/types/auth.type';
+import apiClient from '@/lib/axios.client';
 
 interface AuthContextType {
   user: User | null;
@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await api.post<AuthResponse>('/auth/login', {
+      const response = await apiClient.post<AuthResponse>('/auth/login', {
         email,
         password,
       });
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string
   ): Promise<boolean> => {
     try {
-      const response = await api.post<AuthResponse>('/auth/register', {
+      const response = await apiclient.post<AuthResponse>('/auth/register', {
         name,
         email,
         password,
