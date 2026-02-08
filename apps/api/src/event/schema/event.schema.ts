@@ -6,9 +6,6 @@ export type EventDocument = Event & Document;
 
 @Schema({ timestamps: true })
 export class Event {
-  save(): Event | PromiseLike<Event> {
-    throw new Error('Method not implemented.');
-  }
   @Prop({ required: true })
   title: string;
 
