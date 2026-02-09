@@ -23,13 +23,3 @@ export async function getEventById(id: string) {
     return null;
   }
 }
-
-export async function getEventsClient() {
-  try {
-    const response = await apiClient.get(`${API_URL}/events`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    return [];
-  }
-}
