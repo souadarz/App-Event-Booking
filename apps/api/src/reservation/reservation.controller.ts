@@ -23,11 +23,13 @@ export class ReservationController {
   }
 
   @Get()
+  @Roles(Role.ADMIN)
   findAll() {
     return this.reservationService.findAll();
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.reservationService.remove(id);
   }
@@ -51,7 +53,7 @@ export class ReservationController {
   }
 
   @Get('user/:userId')
-  @Roles(Role.ADMIN, 'participant')
+  @Roles(Role.ADMIN, Role.PARTICIPANT)
   async findByUser(@Param('userId') userId: string) {
     return this.reservationService.findByUser(userId);
   }

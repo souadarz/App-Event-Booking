@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (userData.role === 'admin') {
         router.push('/admin/dashboard');
       } else {
-        router.push('/dashboard');
+        router.push('/participant/reservations');
       }
 
       return true;
