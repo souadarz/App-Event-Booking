@@ -45,11 +45,7 @@ export function EventForm({ event, isEdit = false }: EventFormProps) {
         setLoading(true);
 
         try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                router.push('/login');
-                return;
-            }
+
 
             const dateTime = new Date(`${formData.date}T${formData.time}`);
 
@@ -62,7 +58,7 @@ export function EventForm({ event, isEdit = false }: EventFormProps) {
             };
 
             if (isEdit && event) {
-                await updateEvent(event.id, eventData);
+                await updateEvent(event._id, eventData);
             } else {
                 await createEvent(eventData);
             }

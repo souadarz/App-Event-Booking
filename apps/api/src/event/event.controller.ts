@@ -18,7 +18,7 @@ import { Role } from 'src/common/enums/Role.enum';
 
 @Controller('events')
 export class EventController {
-  constructor(private readonly eventService: EventService) {}
+  constructor(private readonly eventService: EventService) { }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
@@ -65,6 +65,13 @@ export class EventController {
   @Get('published')
   async findPublished() {
     return this.eventService.findPublished();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Get('admin/:id')
+  async findOneAdmin(@Param('id') id: string) {
+    return this.eventService.findById(id);
   }
 
   @Get(':id')
