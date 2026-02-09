@@ -47,7 +47,7 @@ export function EventsTable({ events, onDelete }: EventsTableProps) {
             <tbody className="divide-y divide-[#cad2c5]">
               {events.map((event) => (
                 <tr
-                  key={event.id}
+                  key={event._id}
                   className="hover:bg-[#cad2c5]/20 transition-colors"
                 >
                   <td className="px-6 py-4 text-[#2f3e46] font-medium">
@@ -65,13 +65,12 @@ export function EventsTable({ events, onDelete }: EventsTableProps) {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        event.status === 'PUBLISHED'
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${event.status === 'PUBLISHED'
                           ? 'bg-[#84a98c] text-white'
                           : event.status === 'DRAFT'
-                          ? 'bg-[#cad2c5] text-[#2f3e46]'
-                          : 'bg-[#2f3e46] text-white'
-                      }`}
+                            ? 'bg-[#cad2c5] text-[#2f3e46]'
+                            : 'bg-[#2f3e46] text-white'
+                        }`}
                     >
                       {event.status}
                     </span>
@@ -79,13 +78,13 @@ export function EventsTable({ events, onDelete }: EventsTableProps) {
                   <td className="px-6 py-4">
                     <div className="flex space-x-2">
                       <Link
-                        href={`/admin/events/edit/${event.id}`}
+                        href={`/admin/events/edit/${event._id}`}
                         className="p-2 text-[#84a98c] hover:bg-[#84a98c] hover:text-white rounded transition-colors"
                       >
                         <Edit className="h-4 w-4" />
                       </Link>
                       <button
-                        onClick={() => handleDelete(event.id)}
+                        onClick={() => handleDelete(event._id)}
                         className="p-2 text-[#2f3e46] hover:bg-[#2f3e46] hover:text-white rounded transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />

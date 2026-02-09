@@ -14,6 +14,18 @@ export async function getAllEvents(token?: string) {
   }
 }
 
+
+export async function getEventById(id: string, token?: string) {
+  try {
+    const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+    const response = await apiServer.get(`/events/admin/${id}`, config);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching event:', error);
+    return null;
+  }
+}
+
 export async function getAllReservations(token?: string) {
   try {
     const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
@@ -30,7 +42,10 @@ export async function createEvent(eventData: CreateEventDto) {
   try {
     const response = await apiClient.post('/events', eventData);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response?.status === 400) {
+      console.error('Validation Error details:', JSON.stringify(error.response.data, null, 2));
+    }
     console.error('Error creating event:', error);
     throw error;
   }
@@ -40,7 +55,10 @@ export async function updateEvent(eventId: string, eventData: UpdateEventDto) {
   try {
     const response = await apiClient.patch(`/events/${eventId}`, eventData);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response?.status === 400) {
+      console.error('Validation Error details:', JSON.stringify(error.response.data, null, 2));
+    }
     console.error('Error updating event:', error);
     throw error;
   }

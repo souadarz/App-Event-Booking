@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiServer = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
 });
 
 export default apiServer;
