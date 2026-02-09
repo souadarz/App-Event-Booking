@@ -1,20 +1,30 @@
 'use client';
 
 import Link from 'next/link';
-import { Edit, Trash2, Plus } from 'lucide-react';
+import { Edit, Trash2, Plus, Upload, X } from 'lucide-react';
 import { Event } from '@/types/event.type';
 
 interface EventsTableProps {
   events: Event[];
   onDelete: (eventId: string) => void;
+  onPublish: (eventId: string) => void;
+  onCancel: (eventId: string) => void;
 }
 
-export function EventsTable({ events, onDelete }: EventsTableProps) {
+export function EventsTable({ events, onDelete, onPublish, onCancel}: EventsTableProps) {
   const handleDelete = (eventId: string) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')) {
       onDelete(eventId);
     }
   };
+
+  const handlePublish = (eventId: string) => {
+    onPublish(eventId);
+  }
+
+  const handleCancel = (eventId: string) => {
+    onCancel(eventId)
+  }
 
   return (
     <div>
@@ -88,6 +98,18 @@ export function EventsTable({ events, onDelete }: EventsTableProps) {
                         className="p-2 text-[#2f3e46] hover:bg-[#2f3e46] hover:text-white rounded transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handlePublish(event._id)}
+                        className="p-2 text-[#2f3e46] hover:bg-[#2f3e46] hover:text-white rounded transition-colors"
+                      >
+                        publier
+                      </button>
+                      <button
+                        onClick={() => handleCancel(event._id)}
+                        className="p-2 text-[#2f3e46] hover:bg-[#2f3e46] hover:text-white rounded transition-colors"
+                      >
+                        <X  className="h-4 w-4" />
                       </button>
                     </div>
                   </td>

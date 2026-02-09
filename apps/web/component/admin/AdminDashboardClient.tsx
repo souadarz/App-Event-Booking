@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { EventsTable } from './EventsTable';
 import { ReservationsTable } from './ReservationTable';
-import { deleteEvent } from '@/services/admin.service';
+import { cancelEvent, deleteEvent, publishEvent } from '@/services/admin.service';
 import { Reservation } from '@/types/reservation.type';
 import { Event } from '@/types/event.type';
 
@@ -17,13 +17,10 @@ export function AdminDashboardClient({
   events,
   reservations,
 }: AdminDashboardClientProps) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'events' | 'reservations'>('overview');
+  const [activeTab, setActiveTab] = useState< 'events' | 'reservations'>('events');
   const router = useRouter();
 
   const handleDeleteEvent = async (eventId: string) => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
     const success = await deleteEvent(eventId);
     if (success) {
       router.refresh();
@@ -31,6 +28,24 @@ export function AdminDashboardClient({
       alert('Erreur lors de la suppression de l\'événement');
     }
   };
+
+  const handlePublishEvent = async (eventId: string) =>{
+    const publish = await publishEvent(eventId);
+    if(publish) {
+      router.refresh();
+    } else {
+      alert('Erreur lors de la publication de l\'événement');
+    }
+  }
+
+  const handleCancelEvent = async (eventId: string) => {
+    const cancel = await cancelEvent(eventId);
+    if(cancel) {
+      router.refresh();
+    }else {
+      alert('erreur lors de l\'annulation d\'un evenemt');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#cad2c5]/20 to-white">
@@ -45,7 +60,7 @@ export function AdminDashboardClient({
 
         {/* Tabs */}
         <div className="flex space-x-2 mb-8 border-b border-[#cad2c5]">
-          <button
+          {/* <button
             onClick={() => setActiveTab('overview')}
             className={`px-6 py-3 rounded-t-lg transition-colors font-medium ${
               activeTab === 'overview'
@@ -54,7 +69,7 @@ export function AdminDashboardClient({
             }`}
           >
             Vue d&apos;ensemble
-          </button>
+          </button> */}
           <button
             onClick={() => setActiveTab('events')}
             className={`px-6 py-3 rounded-t-lg transition-colors font-medium ${
@@ -78,13 +93,13 @@ export function AdminDashboardClient({
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'overview' && (
+        {/* {activeTab === 'overview' && (
           <div className="space-y-8">
           </div>
-        )}
+        )} */}
 
         {activeTab === 'events' && (
-          <EventsTable events={events} onDelete={handleDeleteEvent} />
+          <EventsTable events={events} onDelete={handleDeleteEvent} onPublish={handlePublishEvent} onCancel={handleCancelEvent} />
         )}
 
         {activeTab === 'reservations' && (
