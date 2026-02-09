@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       setUser(userData);
 
-      if (userData.role === 'ADMIN') {
+      if (userData.role === 'admin') {
         router.push('/admin/dashboard');
       } else {
         router.push('/dashboard');
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string
   ): Promise<boolean> => {
     try {
-      const response = await apiclient.post<AuthResponse>('/auth/register', {
+      const response = await apiClient.post<AuthResponse>('/auth/register', {
         name,
         email,
         password,
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN',
+    isAdmin: user?.role === 'admin',
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
