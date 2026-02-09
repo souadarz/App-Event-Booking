@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { Calendar } from 'lucide-react';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -25,11 +24,6 @@ export function AuthLayout({
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
-          {/* <div className="flex justify-center mb-4">
-            <div className="bg-white rounded-full p-4">
-              <Calendar className="h-12 w-12 text-[#84a98c]" />
-            </div>
-          </div> */}
           <h1 className="text-4xl font-bold text-white mb-2">{title}</h1>
           <p className="text-[#cad2c5]">{subtitle}</p>
         </div>
@@ -52,7 +46,7 @@ export function AuthLayout({
         {/* Back to home */}
         <div className="text-center mt-6">
           <Link href="/" className="text-[#cad2c5] hover:text-white text-sm transition-colors">
-            Retour à l'accueil
+            Retour à la page d&apos;accueil
           </Link>
         </div>
       </div>
