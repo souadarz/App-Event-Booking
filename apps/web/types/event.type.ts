@@ -6,7 +6,23 @@ export interface Event {
   description: string;
   date: string;
   location: string;
-  maxCapacity: number;
+  capacity: number;
   currentReservations: number;
   status: EventStatus
+}
+
+export interface CreateEventDto {
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  capacity: number;
+}
+
+export interface UpdateEventDto {
+  title?: string;
+  description?: string;
+  date?: string;
+  location?: string;
+  capacity?: number;
 }
