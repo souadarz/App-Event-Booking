@@ -3,9 +3,10 @@ import apiServer from '@/lib/axios.server';
 import { CreateEventDto, UpdateEventDto } from '@/types/event.type';
 
 
-export async function getAllEvents() {
+export async function getAllEvents(token?: string) {
   try {
-    const response = await apiClient.get('/events/all');
+    const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+    const response = await apiClient.get('/events/all', config);
     return response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
@@ -13,9 +14,10 @@ export async function getAllEvents() {
   }
 }
 
-export async function getAllReservations() {
+export async function getAllReservations(token?: string) {
   try {
-    const response = await apiServer.get('/reservations');
+    const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+    const response = await apiServer.get('/reservations', config);
     return response.data;
   } catch (error) {
     console.error('Error fetching reservations:', error);

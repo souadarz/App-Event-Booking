@@ -78,10 +78,10 @@ export function AdminDashboardClient({
         </div>
 
         {/* Tab Content */}
-        {/* {activeTab === 'overview' && (
+        {activeTab === 'overview' && (
           <div className="space-y-8">
           </div>
-        )} */}
+        )}
 
         {activeTab === 'events' && (
           <EventsTable events={events} onDelete={handleDeleteEvent} />

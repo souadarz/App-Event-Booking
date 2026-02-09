@@ -61,7 +61,7 @@ export function EventsTable({ events, onDelete }: EventsTableProps) {
                     {event.location.length > 30 && '...'}
                   </td>
                   <td className="px-6 py-4 text-[#52796f] text-sm">
-                    {event.currentReservations} / {event.maxCapacity}
+                    {event.currentReservations} / {event.capacity}
                   </td>
                   <td className="px-6 py-4">
                     <span

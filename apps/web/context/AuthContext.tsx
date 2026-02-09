@@ -4,6 +4,7 @@ import { createContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthResponse, User } from '@/types/auth.type';
 import apiClient from '@/lib/axios.client';
+import Cookies from 'js-cookie';
 
 interface AuthContextType {
   user: User | null;
@@ -25,20 +26,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initAuth = () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('token');
         const storedUser = localStorage.getItem('user');
 
         if (token && storedUser && storedUser !== 'undefined') {
           setUser(JSON.parse(storedUser));
         } else {
           localStorage.removeItem('user');
-          localStorage.removeItem('token');
+          Cookies.remove('token');
           setUser(null);
         }
       } catch (error) {
         console.error('Impossible de parser le user:', error);
         localStorage.removeItem('user');
-        localStorage.removeItem('token');
+        Cookies.remove('token');
         setUser(null);
       } finally {
         setLoading(false);
@@ -60,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (userData) {
         localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('token', access_token);
+        Cookies.set('token', access_token, { expires: 7 });
       }
 
       setUser(userData);
@@ -92,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const { access_token, user: userData } = response.data;
 
-      localStorage.setItem('token', access_token);
+      Cookies.set('token', access_token, { expires: 7 });
       localStorage.setItem('user', JSON.stringify(userData));
 
       setUser(userData);
@@ -106,7 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    Cookies.remove('token');
     localStorage.removeItem('user');
     setUser(null);
     router.push('/login');
