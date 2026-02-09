@@ -1,3 +1,4 @@
+'use client'
 
 import { AdminDashboardClient } from '@/component/admin/AdminDashboardClient';
 import { ProtectedRoute } from '@/component/auth/ProtectedRoute';

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { EventsTable } from './EventsTable';
 import { ReservationsTable } from './ReservationTable';
-import { StatsCards } from './statsCards';
 import { deleteEvent } from '@/services/admin.service';
 import { Reservation } from '@/types/reservation.type';
 import { Event } from '@/types/event.type';
