@@ -17,11 +17,11 @@ export class ReservationService {
     @InjectModel(Reservation.name)
     private reservationModel: Model<ReservationDocument>,
     private readonly eventService: EventService,
-  ) {}
+  ) { }
 
   // Créer une réservation
-  async create(dto: CreateReservationDto): Promise<ReservationDocument> {
-    const event = await this.eventService.findById(dto.eventId);
+  async create(eventId: string, userId: string): Promise<ReservationDocument> {
+    const event = await this.eventService.findById(eventId);
 
     if (event.status !== EventStatus.PUBLISHED) {
       throw new BadRequestException(
@@ -30,8 +30,8 @@ export class ReservationService {
     }
 
     const existingReservation = await this.reservationModel.findOne({
-      user: dto.userId,
-      event: dto.eventId,
+      user: userId,
+      event: eventId,
     });
     if (
       existingReservation &&
@@ -43,16 +43,16 @@ export class ReservationService {
     }
 
     const confirmedCount = await this.reservationModel.countDocuments({
-      event: dto.eventId,
+      event: eventId,
       status: ReservationStatus.CONFIRMED,
     });
     if (confirmedCount >= event.capacity) {
-      throw new BadRequestException('L’événement est complet');
+      throw new BadRequestException('lévénement est complet');
     }
 
     const reservation = new this.reservationModel({
-      user: dto.userId,
-      event: dto.eventId,
+      user: userId,
+      event: eventId,
       status: ReservationStatus.PENDING,
     });
     return reservation.save();

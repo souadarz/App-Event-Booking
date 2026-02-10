@@ -6,20 +6,22 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
-import { CreateReservationDto } from './dto/create-reservation.dto';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/common/enums/Role.enum';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('reservations')
 export class ReservationController {
-  constructor(private readonly reservationService: ReservationService) {}
+  constructor(private readonly reservationService: ReservationService) { }
 
   @Post()
-  @Roles(Role.PARTICIPANT)
-  async create(@Body() dto: CreateReservationDto) {
-    return this.reservationService.create(dto);
+  @UseGuards(JwtAuthGuard)
+  create(@Req() req, @Body('eventId') eventId: string) {
+    return this.reservationService.create(eventId, req.user.id);
   }
 
   @Get()
