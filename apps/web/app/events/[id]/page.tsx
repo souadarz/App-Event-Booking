@@ -17,9 +17,9 @@ export default async function EventDetailPage({
         notFound();
     }
 
-    const isFull = event.currentReservations >= event.maxCapacity;
+    const isFull = event.currentReservations >= event.capacity;
     const canReserve = event.status === 'PUBLISHED' && !isFull;
-    const fillRate = (event.currentReservations / event.maxCapacity) * 100;
+    const fillRate = (event.currentReservations / event.capacity) * 100;
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#cad2c5]/20 to-white">
@@ -104,7 +104,7 @@ export default async function EventDetailPage({
                                         <p className="text-sm text-[#52796f] mb-2">Places disponibles</p>
                                         <div className="flex items-center justify-between mb-2">
                                             <p className="text-[#2f3e46] font-medium">
-                                                {event.currentReservations} / {event.maxCapacity}
+                                                {event.currentReservations} / {event.Capacity}
                                             </p>
                                             <span className="text-sm text-[#52796f]">{fillRate.toFixed(0)}%</span>
                                         </div>
@@ -119,7 +119,7 @@ export default async function EventDetailPage({
                             </div>
                         </div>
                         <EventActions
-                            eventId={event.id}
+                            eventId={event._id}
                             canReserve={canReserve}
                             status={event.status}
                             isFull={isFull}

@@ -20,7 +20,7 @@ export function EventActions({ eventId, canReserve, status, isFull }: EventActio
       <div className="flex justify-center">
         {isAuthenticated ? (
           <button
-            onClick={() => router.push(`/reservation/${eventId}`)}
+            onClick={() => router.push(`${eventId}/reserve`)}
             className="px-8 py-4 bg-[#84a98c] text-white rounded-xl hover:bg-[#52796f] transition-colors shadow-lg hover:shadow-xl text-lg font-semibold"
           >
             Réserver maintenant

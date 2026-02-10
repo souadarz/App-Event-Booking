@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Event, EventDocument } from './schema/event.schema';
 import { EventStatus } from 'src/common/enums/event-status.enum';
@@ -14,7 +14,7 @@ import { EventStatus } from 'src/common/enums/event-status.enum';
 export class EventService {
   constructor(
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
-  ) {}
+  ) { }
 
   async create(dto: CreateEventDto): Promise<Event> {
     const exists = await this.eventModel.findOne({
@@ -50,6 +50,9 @@ export class EventService {
   }
 
   async findById(id: string): Promise<EventDocument> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('ID invalide');
+    }
     const event = await this.eventModel.findById(id);
     if (!event) {
       throw new NotFoundException('Événement introuvable');
